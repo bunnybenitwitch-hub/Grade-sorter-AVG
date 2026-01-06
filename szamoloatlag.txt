@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Grade Sorter & Average</title>
+    <style>
+        body {
+            font-family: Arial;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #f0f0f0;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.15);
+            width: 400px;
+        }
+
+        h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        input {
+            padding: 12px;
+            font-size: 20px;
+            width: 200px;
+            text-align: center;
+        }
+
+        button {
+            padding: 12px 20px;
+            font-size: 20px;
+            margin-left: 8px;
+            cursor: pointer;
+        }
+
+        #grades, #average {
+            margin-top: 20px;
+            font-size: 22px;
+        }
+
+        #error {
+            color: red;
+            margin-top: 15px;
+            font-size:20px;
+            height: 25px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Grade Input (1–5)</h2>
+
+    <input type="number" id="gradeInput" placeholder="Enter grade" step="1">
+    <button onclick="addGrade()">Add</button>
+
+    <div id="error"></div>
+    <div id="grades"></div>
+    <div id="average"></div>
+</div>
+
+<script>
+    let grades = [];
+
+    function addGrade() {
+        let input = document.getElementById("gradeInput");
+        let grade = Number(input.value);
+        let errorBox = document.getElementById("error");
+        errorBox.textContent = ""; // clear old errors
+
+        // Check for decimals
+        if (!Number.isInteger(grade)) {
+            errorBox.textContent = "Please enter a whole number (no decimals)";
+            return;
+        }
+
+        // Validation range
+        if (grade > 5) {
+            errorBox.textContent = "Cannot get a higher grade than 5";
+            return;
+        }
+        if (grade < 1) {
+            errorBox.textContent = "Cannot get a grade under 1";
+            return;
+        }
+
+        // Add grade
+        grades.push(grade);
+
+        // Sort grades numerically
+        grades.sort((a, b) => a - b);
+
+        // Display grades
+        document.getElementById("grades").textContent =
+            "Grades (sorted): " + grades.join(", ");
+
+        // Calculate average
+        let sum = grades.reduce((a, b) => a + b, 0);
+        let avg = (sum / grades.length).toFixed(2);
+
+        document.getElementById("average").textContent =
+            "Average: " + avg;
+
+        // Clear input
+        input.value = "";
+    }
+</script>
+
+</body>
+</html>
